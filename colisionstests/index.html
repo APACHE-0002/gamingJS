@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+
+        body{
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center ;
+            align-items: center;
+        }
+        .space{
+            border: 8px solid rgb(0, 255, 234);
+            width: 80%;
+            height: 80%;
+            position: relative;
+        }
+        .object1{
+            content: '';
+            width: 40px;
+            height: 40px;
+            background-color: brown;
+            position: absolute;
+        }
+        .object2{
+            content: '';
+            width: 40px;
+            height: 40px;
+            background-color: blueviolet;
+            position: absolute;
+            
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="space">
+        <div class="object1"></div>
+        <div class="object2"></div>
+    </div>
+</body>
+
+<script>
+    var object1 = document.querySelector(".object1");
+    var object2 = document.querySelector(".object2");
+
+    //ponto zero do boneco
+    var x = 90;
+    var x2 = 90;
+    var y = 90;
+    var y2 = 90;
+    var held_directions = []; //estado que armazena a tecla que esta sendo pressionada
+    var held_directions2 = [];
+    var speed = 4; //velocidade do boneco
+
+    /* Direction key state */
+    const directions = {
+    up: "up",
+    down: "down",
+    left: "left",
+    right: "right",
+    }
+
+    const directions2 = {
+    up: "up",
+    down: "down",
+    left: "left",
+    right: "right",
+    }
+
+    const keys = {
+    38: directions.up,
+    37: directions.left,
+    39: directions.right,
+    40: directions.down,
+    }
+
+    const keys2 = {
+    87: directions2.up,
+    65: directions2.left,
+    68: directions2.right,
+    83: directions2.down,
+    }
+
+    document.addEventListener("keydown", (e) => {
+    var dir = keys[e.which];
+    console.log(dir);
+    if (dir && held_directions.indexOf(dir) === -1) {
+        held_directions.unshift(dir)
+        console.log(held_directions)
+    }
+    });
+
+    document.addEventListener("keyup", (e) => {
+        var dir = keys[e.which];
+        var index = held_directions.indexOf(dir);
+        if (index > -1) {
+            held_directions.splice(index, 1)
+        }
+    });
+
+
+    document.addEventListener("keydown", (e) => {
+    var dir2 = keys2[e.which];
+    console.log(dir2);
+    if (dir2 && held_directions2.indexOf(dir2) === -1) {
+        held_directions2.unshift(dir2)
+        console.log(held_directions2)
+    }
+    });
+
+    document.addEventListener("keyup", (e) => {
+    var dir2 = keys2[e.which];
+    var index = held_directions2.indexOf(dir2);
+    if (index > -1) {
+        held_directions2.splice(index, 1)
+    }
+    });
+
+
+    const placeCharacter2 = () => {
+        const held_direction2 = held_directions2[0];
+
+        if (held_direction2) {
+      if (held_direction2 === directions2.right) {x2 += speed;}
+      if (held_direction2 === directions2.left) {x2 -= speed;}
+      if (held_direction2 === directions2.down) {y2 += speed;}
+      if (held_direction2 === directions2.up) {y2 -= speed;}
+
+   var leftLimit2 = 0;
+   var rightLimit2 = (document.querySelector(".space").clientWidth / 4) - 10;
+   var topLimit2 = 0;
+   var bottomLimit2 = (document.querySelector(".space").clientHeight / 4) - 10;
+   }
+
+
+//second
+if (x2 < leftLimit2){ 
+       x2 = leftLimit2; 
+    }
+   if (x2 > rightLimit2){ 
+       x2 = rightLimit2; 
+    }
+   if (y2 < topLimit2){ 
+       y2 = topLimit2; 
+    }
+   if (y2 > bottomLimit2){ 
+       y2 = bottomLimit2; 
+    }
+
+
+    object2.style.transform = `translate3d( ${x2*4}px, ${y2*4}px, 0 )`;
+
+
+    }
+
+
+
+    const placeCharacter = () => {
+   
+   
+   const held_direction = held_directions[0];
+   
+   if (held_direction) {
+      if (held_direction === directions.right) {x += speed;}
+      if (held_direction === directions.left) {x -= speed;}
+      if (held_direction === directions.down) {y += speed;}
+      if (held_direction === directions.up) {y -= speed;}
+   }
+   
+   
+
+   //Limits (gives the illusion of walls)
+   var leftLimit = 0;
+   var rightLimit = (document.querySelector(".space").clientWidth / 6) - 7;
+   var topLimit = 0;
+   var bottomLimit = (document.querySelector(".space").clientHeight / 6) - 7;
+
+   
+   //sempre que o boneco estiver na posiçao menor que -8, ele recebera a posiçao -8
+   if (x < leftLimit){ 
+       x = leftLimit; 
+    }
+   if (x > rightLimit){ 
+       x = rightLimit; 
+    }
+   if (y < topLimit){ 
+       y = topLimit; 
+    }
+   if (y > bottomLimit){ 
+       y = bottomLimit; 
+    }
+
+
+    
+   
+   
+   object1.style.transform = `translate3d( ${x*6}px, ${y*6}px, 0 )`;
+}
+
+
+//Set up the game loop
+const step = () => {
+   placeCharacter();
+   placeCharacter2();
+   window.requestAnimationFrame(() => {
+      step();
+   })
+}
+step(); //kick off the first step!
+
+
+    //object1.style.transform = `translate3d( 35px, 45px, 0 )`;
+
+</script>
+
+</html>
